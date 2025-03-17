@@ -28,7 +28,7 @@ This project explores Astronauts data sourced from Kaggle (NASA astronauts, 1959
 9.What percentage of astronauts hold top-ranking positions?
 10.Does educational background affect the rank of an astronaut?
 
-## Conclusions and Recommendations 
+## Conclusions
 
 After data cleaning, the dataset included a total of 338 astronauts, comprising 281 males and 52 females. Among them, 46 are still in active service, 50 are deceased, 207 have retired, and 35 hold management positions. The average life expectancy of an astronaut was found to be 65 years, with 58 years for females and 67 years for males. Given the significantly lower number of female astronauts, the results predominantly reflect male trends.
 
