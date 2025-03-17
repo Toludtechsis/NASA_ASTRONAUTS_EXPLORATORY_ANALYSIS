@@ -1,5 +1,4 @@
-# NASA_ASTRONAUTS_EXPLORATORY_ANALYSIS
-Dreaming Beyond the Stars: A Data Exploration of Astronauts
+# Dreaming Beyond the Stars: A Data Exploration of Astronauts
 An exploratory analysis on a kaggle dataset about NASA Astronauts
 
 ## Problem Statement
