@@ -1,0 +1,185 @@
+SELECT * FROM  astronauts; --- 338
+
+/* Total Number of astronauts*/
+SELECT  COUNT(*) AS Total_Number_Of_Astronauts
+FROM astronauts;
+
+/* Status of the astronaut*/ -- Ac -46 , de - 50 , mg - 35 , retired -207
+SELECT Status, COUNT(*) AS Number
+FROM astronauts
+GROUP BY Status;
+
+/* Status of the astronaut*/
+SELECT Status,Missions,Death_Mission
+FROM astronauts
+Where status = 'deceased';
+
+/* Status of the retired astronaut*/  --- 'STS-107 (Columbia)','STS 51-L (Challenger)','Apollo 1' = NULL
+SELECT Status,Missions,Death_Mission
+FROM astronauts
+Where status = 'retired' and 
+Missions in ('STS-107 (Columbia)','STS 51-L (Challenger)','Apollo 1');
+
+/*  Military Branch of the astronaut*/ --us aIR FORCE HIGHEST ASTRO
+SELECT Military_Branch, COUNT(*) AS Number
+FROM astronauts
+Where Military_Branch IS NOT NULL
+GROUP BY Military_Branch
+Order by Number Desc;
+
+----Military Rank----
+select Military_Rank, count(*) as Number
+from astronauts
+where Military_Rank IS NOT NULL
+Group by Military_Rank
+Order by Number desc;
+
+---Top Ranking Officials--- one female Lieutenant General
+select Name,gender,Undergraduate_major,Graduate_Major1, Military_Rank
+from astronauts
+where Military_Rank IS NOT NULL and Military_rank in 
+('Major General','Brigadier General','Lieutenant General','Rear Admiral','Vice Admiral');
+
+----Percentage of Top Ranking Officials----- 3.8%
+-- TWO FEMALE TOP RANKING OFFICER
+
+SELECT 
+    (COUNT(CASE 
+        WHEN Military_Rank IN 
+		('Major General','Brigadier General','Lieutenant General',
+		'Rear Admiral','Vice Admiral') THEN 1 
+    END) * 100.0) / COUNT(*) AS Top_Ranking_Percentage
+FROM astronauts;
+
+SELECT military_rank,gender,Undergraduate_Major,Graduate_Major1,Graduate_Major2,Graduate_Major3,Graduate_Major4
+       
+FROM astronauts
+ Where Military_Rank IN 
+		('Major General','Brigadier General','Lieutenant General',
+		'Rear Admiral','Vice Admiral');
+
+
+
+
+/*  Top 5 Rank of the astronaut*/
+SELECT TOP 5 Military_Rank, COUNT(*) AS Total_Astronauts
+FROM astronauts
+WHERE Military_Rank IS NOT NULL
+GROUP BY Military_Rank
+ORDER BY Total_Astronauts DESC;
+
+SELECT  Military_Rank,Undergraduate_Major,Graduate_Major1,Graduate_Major2,Graduate_Major3,Graduate_Major4
+FROM astronauts
+WHERE Military_Rank IS NOT NULL;
+
+/* Gender of the astronaut*/
+SELECT Gender, COUNT(*) AS Number
+FROM astronauts
+GROUP BY Gender;
+
+/*What is the Average life Expectancy of Astronaut*/
+SELECT ROUND(AVG(life_Expectancy),0) AS Avg_Life_Expectancy
+FROM(
+SELECT 
+    CASE 
+        WHEN Status = 'Deceased' THEN 
+            CAST(RIGHT(Death_Date, 4) AS INT) - CAST(RIGHT(Birth_Date, 4) AS INT)
+        WHEN Status != 'Deceased' THEN  
+            2020 - CAST(RIGHT(Birth_Date, 4) AS INT)
+    END AS Life_Expectancy
+FROM Astronauts) AS  Average_Life_Expectancy
+
+/*What is the Average life Expectancy of a Male Astronaut*/
+SELECT ROUND(AVG(A_Male_life_Expectancy),0) AS Male_Average_Life_Expectancy
+FROM(
+SELECT 
+	CASE 
+		WHEN Status = 'Deceased' AND Gender ='Male' THEN  CAST(RIGHT(Death_Date, 4) AS INT) - CAST(RIGHT(Birth_Date, 4) AS INT)
+		WHEN Status != 'Deceased' AND Gender ='Male' THEN  2020 - CAST(RIGHT(Birth_Date, 4) AS INT) 
+    END AS A_Male_life_Expectancy
+ FROM astronauts  
+ ) AS Male_Life_Expectancy;
+ 
+
+/*What is the Average life Expectancy of a Female Astronaut*/
+SELECT ROUND(AVG(A_Female_life_Expectancy),0) AS Female_Average_Life_Expectancy
+FROM(
+SELECT 
+	CASE 
+		WHEN Status = 'Deceased' AND Gender ='Female' THEN  CAST(RIGHT(Death_Date, 4) AS INT) - CAST(RIGHT(Birth_Date, 4) AS INT)
+		WHEN Status != 'Deceased' AND Gender ='Female' THEN  2020 - CAST(RIGHT(Birth_Date, 4) AS INT) 
+    END AS A_Female_life_Expectancy
+ FROM astronauts  
+ ) AS Female_Life_Expectancy;
+
+SELECT Top 10 Undergraduate_Major, COUNT(Undergraduate_Major) AS Number
+FROM astronauts
+Where Undergraduate_Major IS NOT NULL
+GROUP BY Undergraduate_Major
+ORDER BY Number DESC;
+
+SELECT Top 5 Graduate_Major1, COUNT(Graduate_Major1) AS Number
+FROM astronauts
+Where Graduate_Major1 IS NOT NULL
+GROUP BY Graduate_Major1
+ORDER BY Number DESC;
+
+SELECT COUNT(Graduate_Major1) AS COUNT_GRAD -- 281 hold masters
+from astronauts
+where Graduate_Major1 IS NOT NULL
+
+
+
+SELECT Top 10 Graduate_Major2, COUNT(Graduate_Major2) AS Number
+FROM astronauts
+Where Graduate_Major2 IS NOT NULL
+GROUP BY Graduate_Major2
+ORDER BY Number DESC;
+
+SELECT Top 10 Graduate_Major3, COUNT(Graduate_Major3) AS Number
+FROM astronauts
+Where Graduate_Major3 IS NOT NULL
+GROUP BY Graduate_Major3
+ORDER BY Number DESC;
+
+SELECT Top 10 Graduate_Major4, COUNT(Graduate_Major4) AS Number, Military_Rank
+FROM astronauts
+Where Graduate_Major4 IS NOT NULL
+GROUP BY Graduate_Major4
+ORDER BY Number DESC;
+
+SELECT Graduate_Major1, Military_Rank
+FROM astronauts
+Where Graduate_Major1 IS NOT NULL
+AND Military_Rank IS NOT NULL;
+
+/*What is the level of education of most astronaut*/
+SELECT COUNT(*) AS NO_of_Astronauts,
+COUNT(Undergraduate_Major) AS with_Undergrad_Degrees,
+COUNT(Graduate_Major1)AS Astronauts_with_1_Grad_Degrees,
+COUNT(Graduate_Major2)AS Astronauts_with_2_Grad_Degrees,
+COUNT(Graduate_Major3)AS Astronauts_with_3_Grad_Degrees,
+COUNT(Graduate_Major4)AS Astronauts_with_4_Grad_Degrees
+FROM astronauts;
+
+/* TOP 5  undergraduate Universities astronuats attended*/
+SELECT TOP 5 Alma_Mater1 AS UnderGrad_University, Count(*) AS Number
+FROM  astronauts
+GROUP BY Alma_Mater1
+ORDER BY Number DESC;
+
+
+
+/* TOP Countries/States austronauts come from*/
+SELECT TOP 10 RIGHT(Birth_Place,2) AS CITY, Count(*) AS Number
+FROM  astronauts
+GROUP BY Birth_Place
+ORDER BY Number DESC;
+
+/*Average number of space flight and space Walks*/
+SELECT ROUND(AVG(Space_Flights),2) AS Average_Number_Of_Space_Flight , ROUND(AVG(Space_Walks),2) AS Average_Number_Of_Space_Walks
+FROM astronauts;
+
+/*Average hours of space flight and space Walks*/
+SELECT ROUND(AVG(Space_Flight_hr),0) AS Average_Hours_Of_Space_Flight , ROUND(AVG(Space_Walks_hr),0) AS Average_Hours_Of_Space_Walks
+FROM astronauts;
