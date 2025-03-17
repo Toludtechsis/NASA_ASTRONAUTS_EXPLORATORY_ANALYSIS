@@ -10,7 +10,7 @@ However, like any career, it comes with challenges. Extended time in space can w
 
 This project is a data-driven exploration of astronauts—who they are, where they come from, and what defines their journey. Whether or not I ever make it to space myself, I hope this analysis sheds light on the incredible individuals who do.
 
-Would you still like to be an astronaut? 🚀✨
+Would you still like to be an astronaut? 
 
 
 ## Objectives
