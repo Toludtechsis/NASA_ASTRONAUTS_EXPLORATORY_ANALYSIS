@@ -4,13 +4,13 @@ SELECT * FROM  astronauts; --- 338
 SELECT  COUNT(*) AS Total_Number_Of_Astronauts
 FROM astronauts;
 
-/* Status of the astronaut*/ -- Ac -46 , de - 50 , mg - 35 , retired -207
+/* Status of the astronaut*/ -- Ac -46 , de - 59 , mg - 35 , retired -206
 SELECT Status, COUNT(*) AS Number
 FROM astronauts
 GROUP BY Status;
 
 /* Status of the astronaut*/
-SELECT Status,Missions,Death_Mission
+SELECT Status,Missions,Death_Mission,Undergraduate_Major,Graduate_Major1,Graduate_Major2,Graduate_Major3,Graduate_Major4
 FROM astronauts
 Where status = 'deceased';
 
@@ -19,6 +19,38 @@ SELECT Status,Missions,Death_Mission
 FROM astronauts
 Where status = 'retired' and 
 Missions in ('STS-107 (Columbia)','STS 51-L (Challenger)','Apollo 1');
+
+/* Status of the retired astronaut*/  --- 'STS-107 (Columbia)','STS 51-L (Challenger)','Apollo 1' = NULL
+SELECT Undergraduate_Major, count(Missions) as Mission_Knt
+FROM astronauts
+Where Undergraduate_Major in 
+('Aeronautical Engineering', 'Aerospace Engineering', 'Medicine', 
+'Physics', 'Mechanical Engineering','Electrical Engineering','Engineering','Engineering Science')
+Group by Undergraduate_Major
+Order by Mission_Knt desc;
+
+--Astronauts with degrees in engineering had more mission counts across board.
+--
+
+SELECT Undergraduate_Major, sum(Space_Flight_hr) as Mission_Duration
+FROM astronauts
+Where Undergraduate_Major in 
+('Aeronautical Engineering', 'Aerospace Engineering', 'Medicine', 
+'Physics', 'Mechanical Engineering','Electrical Engineering','Engineering','Engineering Science')
+Group by Undergraduate_Major
+Order by Mission_Duration desc;
+
+--- Astronauts with Engineering Degrees had longer mission durations with Aerospace Engineering degrees having 44401 hours
+
+SELECT Undergraduate_Major, sum(Space_Walks) as Mission_Space_Walks
+FROM astronauts
+Where Undergraduate_Major in 
+('Aeronautical Engineering', 'Aerospace Engineering', 'Medicine', 
+'Physics', 'Mechanical Engineering','Electrical Engineering','Engineering','Engineering Science')
+Group by Undergraduate_Major
+Order by Mission_Space_Walks desc;
+
+
 
 /*  Military Branch of the astronaut*/ --us aIR FORCE HIGHEST ASTRO
 SELECT Military_Branch, COUNT(*) AS Number
@@ -33,6 +65,37 @@ from astronauts
 where Military_Rank IS NOT NULL
 Group by Military_Rank
 Order by Number desc;
+
+SELECT Alma_Mater1, Count(Missions) as Mission_Knt
+FROM astronauts
+Where Alma_Mater1  Like 
+'%NAVAL%' or Alma_Mater1  Like  '%AIR FORCE%' or Alma_Mater1  Like   '%MILITARY%'
+Group by Alma_Mater1
+Order by Mission_Knt desc;
+
+SELECT Alma_Mater1, AVG(Space_Flight_hr) AS Avg_Missions
+FROM astronauts
+Where Alma_Mater1  Like 
+'%NAVAL%' or Alma_Mater1  Like  '%AIR FORCE%' or Alma_Mater1  Like   '%MILITARY%'
+GROUP BY Alma_Mater1
+ORDER BY Avg_Missions DESC;
+
+---Millitary backgrounds were deployed on more missions compared to their civilian background conterparts.
+--- They spend a longer duration of time on missions  
+
+SELECT Alma_Mater1,sum(Space_Flight_hr) duration, Count(Missions) as Mission_Knt
+FROM astronauts
+Group by Alma_Mater1
+Order by duration desc;
+
+SELECT Gender, 
+       AVG(Space_Flight_hr) AS Avg_Missions, 
+       AVG(Space_Walks_hr) AS Avg_Spacewalks
+FROM astronauts
+GROUP BY Gender;
+
+---Female astronauts average more mission durations than their male counterparts
+--with half of the spacewalks of their male counterparts. this maybe as a result of the type of missions female astronauts were deployed on
 
 ---Top Ranking Officials--- one female Lieutenant General
 select Name,gender,Undergraduate_major,Graduate_Major1, Military_Rank
@@ -51,12 +114,14 @@ SELECT
     END) * 100.0) / COUNT(*) AS Top_Ranking_Percentage
 FROM astronauts;
 
-SELECT military_rank,gender,Undergraduate_Major,Graduate_Major1,Graduate_Major2,Graduate_Major3,Graduate_Major4
+SELECT id,name,military_rank,gender,Undergraduate_Major,Graduate_Major1,Graduate_Major2,Graduate_Major3,Graduate_Major4
        
 FROM astronauts
  Where Military_Rank IN 
 		('Major General','Brigadier General','Lieutenant General',
 		'Rear Admiral','Vice Admiral');
+
+
 
 
 
@@ -77,6 +142,29 @@ SELECT Gender, COUNT(*) AS Number
 FROM astronauts
 GROUP BY Gender;
 
+SELECT id,name,Gender,Military_Rank,Undergraduate_Major,Graduate_Major1,Alma_Mater1
+FROM astronauts
+where Gender ='female' 
+order by Name asc;
+
+SELECT Name,(Year - CAST(RIGHT(Birth_Date, 4) AS INT)) as Age, Military_Rank,GroupNum,Military_Branch
+Alma_Mater1,Undergraduate_Major, Count(missions) No_Missions
+ FROM astronauts  
+Group by name, Year,Birth_Date,Undergraduate_Major,Military_Rank,Alma_Mater1,GroupNum,Military_Branch
+Order by No_Missions desc;
+
+SELECT Name,(Year - CAST(RIGHT(Birth_Date, 4) AS INT)) as Age, Military_Rank,GroupNum,Military_Branch
+Alma_Mater1,Undergraduate_Major, Missions,Death_Mission
+ FROM astronauts 
+ Where name in ('Bruce E. Melnick','Karl G. Henize','William C. McCool')
+
+
+
+---Age doesn't seem to have a direct inpact on how astronauts are drafted for missions.
+--Majority of astronauts only went on 1 mission while 1 astronauts within the age 38 was observed to have gone one more than one mission
+-- This astronaut could not be determined has having a feature  that impacted their drafting on more than a single mission
+--- There is no way to determine if being top ranking astronaut (commander) influenced going on more than one trip
+
 /*What is the Average life Expectancy of Astronaut*/
 SELECT ROUND(AVG(life_Expectancy),0) AS Avg_Life_Expectancy
 FROM(
@@ -88,6 +176,26 @@ SELECT
             2020 - CAST(RIGHT(Birth_Date, 4) AS INT)
     END AS Life_Expectancy
 FROM Astronauts) AS  Average_Life_Expectancy
+
+
+SELECT 
+    AVG(Space_Flight_hr) AS Avg_Flight_Hours,
+    ROUND(AVG(Life_Expectancy), 0) AS Avg_Life_Expectancy
+FROM (
+    SELECT 
+        Space_Flight_hr,
+        CASE 
+            WHEN Status = 'Deceased' THEN 
+                CAST(RIGHT(Death_Date, 4) AS INT) - CAST(RIGHT(Birth_Date, 4) AS INT)
+            ELSE  
+                2020 - CAST(RIGHT(Birth_Date, 4) AS INT)
+        END AS Life_Expectancy
+    FROM Astronauts
+) AS Life_Expectancy_Table;
+
+--The average duration spent of a mission is 1248 hours - 52 days
+-- The life expectancy  - 65 days which is lower than the global average
+
 
 /*What is the Average life Expectancy of a Male Astronaut*/
 SELECT ROUND(AVG(A_Male_life_Expectancy),0) AS Male_Average_Life_Expectancy
@@ -183,3 +291,15 @@ FROM astronauts;
 /*Average hours of space flight and space Walks*/
 SELECT ROUND(AVG(Space_Flight_hr),0) AS Average_Hours_Of_Space_Flight , ROUND(AVG(Space_Walks_hr),0) AS Average_Hours_Of_Space_Walks
 FROM astronauts;
+
+SELECT Year, 
+       COUNT(*) AS Total_Astronauts, 
+       SUM(CASE WHEN Status = 'Deceased' THEN 1 ELSE 0 END) AS Deceased_Astronauts,
+       (SUM(CASE WHEN Status = 'Deceased' THEN 1 ELSE 0 END) * 100.0 / COUNT(*)) AS Fatality_Percentage
+FROM astronauts
+GROUP BY Year
+ORDER BY Year desc;
+
+-- It was observered that there has been no fatality recorded
+--among astronauts drafted in recent decades which is an indication that experiences has
+-- has taught the organisation and has led to improved ways to prevent mission related deaths.
