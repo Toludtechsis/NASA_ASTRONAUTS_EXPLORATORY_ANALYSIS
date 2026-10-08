@@ -2,7 +2,7 @@
 An exploratory analysis on a kaggle dataset about NASA Astronauts
 
 ## Problem Statement
-As a child in second grade, I, like many others, dreamed of becoming an astronaut. I vividly remember my picture catalog—where A stood for Astronaut, accompanied by a 3D representation of a space explorer. Without fully grasping what it meant, I was fascinated by the idea of venturing beyond Earth.
+As a child in second grade, I, like many others, dreamed of becoming an astronaut. I vividly remember my picture catalog where A stood for Astronaut, accompanied by a 3D representation of a space explorer. Without fully grasping what it meant, I was fascinated by the idea of venturing beyond Earth.
 
 Though life led me down a different career path, my admiration for astronauts has only grown. They are highly trained professionals who pilot spacecraft, conduct research, and work in space one of the most exciting and prestigious careers in the world. Imagine soaring through nebulae, witnessing the brilliance of constellations up close, and floating in zero gravity. Beyond the adventure, astronauts also enjoy some of the highest salaries in the world, making it an enviable profession.
 
