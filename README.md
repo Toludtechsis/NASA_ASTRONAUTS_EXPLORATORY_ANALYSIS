@@ -8,7 +8,7 @@ Though life led me down a different career path, my admiration for astronauts ha
 
 However, like any career, it comes with challenges. Extended time in space can weaken bones, impact blood circulation, and affect mental well-being. Astronauts are also exposed to heightened levels of radiation, posing long-term health risks. Yet, despite these drawbacks, the allure of space exploration remains strong.
 
-This project is a data-driven exploration of astronauts—who they are, where they come from, and what defines their journey. Whether or not I ever make it to space myself, I hope this analysis sheds light on the incredible individuals who do.
+This project is a data-driven exploration of astronauts who they are, where they come from, and what defines their journey. Whether or not I ever make it to space myself, I hope this analysis sheds light on the incredible individuals who do.
 All observations and recommendations are based on the datset analysed.
 
 
